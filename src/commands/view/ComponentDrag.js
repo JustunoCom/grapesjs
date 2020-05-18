@@ -17,6 +17,7 @@ export default {
       'getGuidesTarget'
     );
     const { target, event, mode, dragger = {} } = opts;
+    console.log({ target, event, mode });
     const el = target.getEl();
     const config = {
       doc: el.ownerDocument,
@@ -38,6 +39,10 @@ export default {
     this.guidesContainer = this.getGuidesContainer();
     this.guidesTarget = this.getGuidesTarget();
     this.guidesStatic = this.getGuidesStatic();
+    this.wrapperBoundingBox = editor
+      .getWrapper()
+      .getEl()
+      .getBoundingClientRect();
     let drg = this.dragger;
 
     if (!drg) {
@@ -261,7 +266,10 @@ export default {
 
   getPosition() {
     const { target, isTran } = this;
-    const { left, top, transform } = target.getStyle();
+    let { left, top, transform } = target.getStyle();
+    left = (parseFloat(left) * parseFloat(this.wrapperBoundingBox.width)) / 100;
+    top = (parseFloat(top) * parseFloat(this.wrapperBoundingBox.height)) / 100;
+
     let x = 0;
     let y = 0;
 
@@ -278,10 +286,14 @@ export default {
 
   setPosition({ x, y, end, position, width, height }) {
     const { target, isTran } = this;
-    const unit = 'px';
+    const unit = '%';
     const en = !end ? 1 : ''; // this will trigger the final change
-    const left = `${x}${unit}`;
-    const top = `${y}${unit}`;
+    const left = `${((x - this.wrapperBoundingBox.x) /
+      this.wrapperBoundingBox.width) *
+      100}${unit}`;
+    const top = `${((y - this.wrapperBoundingBox.y) /
+      this.wrapperBoundingBox.height) *
+      100}${unit}`;
 
     if (isTran) {
       let transform = target.getStyle()['transform'] || '';
