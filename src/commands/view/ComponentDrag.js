@@ -38,6 +38,11 @@ export default {
     this.guidesContainer = this.getGuidesContainer();
     this.guidesTarget = this.getGuidesTarget();
     this.guidesStatic = this.getGuidesStatic();
+    this.wrapperBoundingBox = editor
+      .getWrapper()
+      .getEl()
+      .getBoundingClientRect();
+    this.bodyBoundingBox = editor.Canvas.getBody().getBoundingClientRect();
     let drg = this.dragger;
 
     if (!drg) {
@@ -261,7 +266,10 @@ export default {
 
   getPosition() {
     const { target, isTran } = this;
-    const { left, top, transform } = target.getStyle();
+    let { left, top, transform } = target.getStyle();
+    left = (parseFloat(left) * parseFloat(this.wrapperBoundingBox.width)) / 100;
+    top = (parseFloat(top) * parseFloat(this.wrapperBoundingBox.height)) / 100;
+
     let x = 0;
     let y = 0;
 
@@ -278,11 +286,17 @@ export default {
 
   setPosition({ x, y, end, position, width, height }) {
     const { target, isTran } = this;
-    const unit = 'px';
+    const unit = '%';
     const en = !end ? 1 : ''; // this will trigger the final change
-    const left = `${x}${unit}`;
-    const top = `${y}${unit}`;
+    const leftPercent = (x * 100) / this.wrapperBoundingBox.width;
+    const topPercent = (y * 100) / this.wrapperBoundingBox.height;
 
+    const left = `${
+      leftPercent > 100 ? 100 : leftPercent < 0 ? 0 : leftPercent
+    }${unit}`;
+    const top = `${
+      topPercent > 100 ? 100 : topPercent < 0 ? 0 : topPercent
+    }${unit}`;
     if (isTran) {
       let transform = target.getStyle()['transform'] || '';
       transform = this.setTranslate(transform, 'x', left);

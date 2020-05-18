@@ -26057,13 +26057,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 
 
-var evName = 'dmode';
+var evName = "dmode";
 /* harmony default export */ __webpack_exports__["default"] = ({
   run: function run(editor, sender) {
     var _this = this;
 
     var opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    Object(underscore__WEBPACK_IMPORTED_MODULE_1__["bindAll"])(this, 'setPosition', 'onStart', 'onDrag', 'onEnd', 'getPosition', 'getGuidesStatic', 'renderGuide', 'getGuidesTarget');
+    Object(underscore__WEBPACK_IMPORTED_MODULE_1__["bindAll"])(this, "setPosition", "onStart", "onDrag", "onEnd", "getPosition", "getGuidesStatic", "renderGuide", "getGuidesTarget");
     var target = opts.target,
         event = opts.event,
         mode = opts.mode,
@@ -26091,10 +26091,12 @@ var evName = 'dmode';
     this.editor = editor;
     this.em = editor.getModel();
     this.target = target;
-    this.isTran = mode == 'translate';
+    this.isTran = mode == "translate";
     this.guidesContainer = this.getGuidesContainer();
     this.guidesTarget = this.getGuidesTarget();
     this.guidesStatic = this.getGuidesStatic();
+    this.wrapperBoundingBox = editor.getWrapper().getEl().getBoundingClientRect();
+    this.bodyBoundingBox = editor.Canvas.getBody().getBoundingClientRect();
     var drg = this.dragger;
 
     if (!drg) {
@@ -26136,11 +26138,11 @@ var evName = 'dmode';
       var editor = this.editor,
           em = this.em,
           opts = this.opts;
-      var pfx = editor.getConfig('stylePrefix');
-      var elInfoX = document.createElement('div');
-      var elInfoY = document.createElement('div');
+      var pfx = editor.getConfig("stylePrefix");
+      var elInfoX = document.createElement("div");
+      var elInfoY = document.createElement("div");
       var guideContent = "<div class=\"".concat(pfx, "guide-info__line ").concat(pfx, "danger-bg\">\n        <div class=\"").concat(pfx, "guide-info__content ").concat(pfx, "danger-color\"></div>\n      </div>");
-      guidesEl = document.createElement('div');
+      guidesEl = document.createElement("div");
       guidesEl.className = "".concat(pfx, "guides");
       elInfoX.className = "".concat(pfx, "guide-info ").concat(pfx, "guide-info__x");
       elInfoY.className = "".concat(pfx, "guide-info ").concat(pfx, "guide-info__y");
@@ -26154,7 +26156,7 @@ var evName = 'dmode';
       this.elGuideInfoY = elInfoY;
       this.elGuideInfoContentX = elInfoX.querySelector(".".concat(pfx, "guide-info__content"));
       this.elGuideInfoContentY = elInfoY.querySelector(".".concat(pfx, "guide-info__content"));
-      em.on('canvas:update frame:scroll', Object(underscore__WEBPACK_IMPORTED_MODULE_1__["debounce"])(function () {
+      em.on("canvas:update frame:scroll", Object(underscore__WEBPACK_IMPORTED_MODULE_1__["debounce"])(function () {
         _this2.updateGuides();
 
         opts.debug && _this2.guides.forEach(function (item) {
@@ -26203,27 +26205,27 @@ var evName = 'dmode';
         width = rect.width;
 
     switch (item.type) {
-      case 't':
+      case "t":
         result.y = top;
         break;
 
-      case 'b':
+      case "b":
         result.y = top + height;
         break;
 
-      case 'l':
+      case "l":
         result.x = left;
         break;
 
-      case 'r':
+      case "r":
         result.x = left + width;
         break;
 
-      case 'x':
+      case "x":
         result.x = left + width / 2;
         break;
 
-      case 'y':
+      case "y":
         result.y = top + height / 2;
         break;
     }
@@ -26232,26 +26234,26 @@ var evName = 'dmode';
   },
   renderGuide: function renderGuide() {
     var item = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var el = item.guide || document.createElement('div');
-    var un = 'px';
+    var el = item.guide || document.createElement("div");
+    var un = "px";
     var guideSize = item.active ? 2 : 1;
     var numEl = el.children[0];
-    el.style = "position: absolute; background-color: ".concat(item.active ? 'green' : 'red', ";");
+    el.style = "position: absolute; background-color: ".concat(item.active ? "green" : "red", ";");
 
     if (!el.children.length) {
-      numEl = document.createElement('div');
-      numEl.style = 'position: absolute; color: red; padding: 5px; top: 0; left: 0;';
+      numEl = document.createElement("div");
+      numEl.style = "position: absolute; color: red; padding: 5px; top: 0; left: 0;";
       el.appendChild(numEl);
     }
 
     if (item.y) {
-      el.style.width = '100%';
+      el.style.width = "100%";
       el.style.height = "".concat(guideSize).concat(un);
       el.style.top = "".concat(item.y).concat(un);
       el.style.left = 0;
     } else {
       el.style.width = "".concat(guideSize).concat(un);
-      el.style.height = '100%';
+      el.style.height = "100%";
       el.style.left = "".concat(item.x).concat(un);
       el.style.top = "0".concat(un);
     }
@@ -26274,27 +26276,27 @@ var evName = 'dmode';
         left = originRect.left,
         width = originRect.width;
     var guides = [{
-      type: 't',
+      type: "t",
       y: top
     }, // Top
     {
-      type: 'b',
+      type: "b",
       y: top + height
     }, // Bottom
     {
-      type: 'l',
+      type: "l",
       x: left
     }, // Left
     {
-      type: 'r',
+      type: "r",
       x: left + width
     }, // Right
     {
-      type: 'x',
+      type: "x",
       x: left + width / 2
     }, // Mid x
     {
-      type: 'y',
+      type: "y",
       y: top + height / 2
     } // Mid y
     ].map(function (item) {
@@ -26310,23 +26312,23 @@ var evName = 'dmode';
     return guides;
   },
   getTranslate: function getTranslate(transform) {
-    var axis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'x';
+    var axis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "x";
     var result = 0;
-    (transform || '').split(' ').forEach(function (item) {
+    (transform || "").split(" ").forEach(function (item) {
       var itemStr = item.trim();
       var fn = "translate".concat(axis.toUpperCase(), "(");
-      if (itemStr.indexOf(fn) === 0) result = parseFloat(itemStr.replace(fn, ''));
+      if (itemStr.indexOf(fn) === 0) result = parseFloat(itemStr.replace(fn, ""));
     });
     return result;
   },
   setTranslate: function setTranslate(transform, axis, value) {
     var fn = "translate".concat(axis.toUpperCase(), "(");
     var val = "".concat(fn).concat(value, ")");
-    var result = (transform || '').split(' ').map(function (item) {
+    var result = (transform || "").split(" ").map(function (item) {
       var itemStr = item.trim();
       if (itemStr.indexOf(fn) === 0) item = val;
       return item;
-    }).join(' ');
+    }).join(" ");
     if (result.indexOf(fn) < 0) result += " ".concat(val);
     return result;
   },
@@ -26339,12 +26341,14 @@ var evName = 'dmode';
         top = _target$getStyle.top,
         transform = _target$getStyle.transform;
 
+    left = parseFloat(left) * parseFloat(this.wrapperBoundingBox.width) / 100;
+    top = parseFloat(top) * parseFloat(this.wrapperBoundingBox.height) / 100;
     var x = 0;
     var y = 0;
 
     if (isTran) {
       x = this.getTranslate(transform);
-      y = this.getTranslate(transform, 'y');
+      y = this.getTranslate(transform, "y");
     } else {
       x = parseFloat(left);
       y = parseFloat(top);
@@ -26364,16 +26368,18 @@ var evName = 'dmode';
         height = _ref.height;
     var target = this.target,
         isTran = this.isTran;
-    var unit = 'px';
-    var en = !end ? 1 : ''; // this will trigger the final change
+    var unit = "%";
+    var en = !end ? 1 : ""; // this will trigger the final change
 
-    var left = "".concat(x).concat(unit);
-    var top = "".concat(y).concat(unit);
+    var leftPercent = x * 100 / this.wrapperBoundingBox.width;
+    var topPercent = y * 100 / this.wrapperBoundingBox.height;
+    var left = "".concat(leftPercent > 100 ? 100 : leftPercent < 0 ? 0 : leftPercent).concat(unit);
+    var top = "".concat(topPercent > 100 ? 100 : topPercent < 0 ? 0 : topPercent).concat(unit);
 
     if (isTran) {
-      var transform = target.getStyle()['transform'] || '';
-      transform = this.setTranslate(transform, 'x', left);
-      transform = this.setTranslate(transform, 'y', top);
+      var transform = target.getStyle()["transform"] || "";
+      transform = this.setTranslate(transform, "x", left);
+      transform = this.setTranslate(transform, "y", top);
       return target.addStyle({
         transform: transform,
         en: en
@@ -26417,7 +26423,7 @@ var evName = 'dmode';
         onStart = opts.onStart;
     var Canvas = editor.Canvas;
     var style = target.getStyle();
-    var position = 'absolute';
+    var position = "absolute";
     onStart && onStart(this._getDragData());
     if (isTran) return;
 
@@ -26478,10 +26484,10 @@ var evName = 'dmode';
   hideGuidesInfo: function hideGuidesInfo() {
     var _this7 = this;
 
-    ['X', 'Y'].forEach(function (item) {
+    ["X", "Y"].forEach(function (item) {
       var guide = _this7["elGuideInfo".concat(item)];
 
-      if (guide) guide.style.display = 'none';
+      if (guide) guide.style.display = "none";
     });
   },
 
@@ -26500,10 +26506,10 @@ var evName = 'dmode';
 
       var rectOrigin = _this8.getElementPos(origin);
 
-      var axis = Object(underscore__WEBPACK_IMPORTED_MODULE_1__["isUndefined"])(x) ? 'y' : 'x';
-      var isY = axis === 'y';
-      var origEdge1 = rectOrigin[isY ? 'left' : 'top'];
-      var origEdge1Raw = rectOrigin.rect[isY ? 'left' : 'top'];
+      var axis = Object(underscore__WEBPACK_IMPORTED_MODULE_1__["isUndefined"])(x) ? "y" : "x";
+      var isY = axis === "y";
+      var origEdge1 = rectOrigin[isY ? "left" : "top"];
+      var origEdge1Raw = rectOrigin.rect[isY ? "left" : "top"];
       var origEdge2 = isY ? origEdge1 + rectOrigin.width : origEdge1 + rectOrigin.height;
       var origEdge2Raw = isY ? origEdge1Raw + rectOrigin.rect.width : origEdge1Raw + rectOrigin.rect.height;
 
@@ -26552,10 +26558,10 @@ var evName = 'dmode';
         var pos2 = "".concat(posFirst, "px");
         var size = isEdge1 ? origEdge1 - statEdge2 : statEdge1 - origEdge2;
         var sizeRaw = isEdge1 ? origEdge1Raw - statEdge2Raw : statEdge1Raw - origEdge2Raw;
-        guideInfoStyle.display = '';
-        guideInfoStyle[isY ? 'top' : 'left'] = pos2;
-        guideInfoStyle[isY ? 'left' : 'top'] = "".concat(posSecond, "px");
-        guideInfoStyle[isY ? 'width' : 'height'] = "".concat(size, "px");
+        guideInfoStyle.display = "";
+        guideInfoStyle[isY ? "top" : "left"] = pos2;
+        guideInfoStyle[isY ? "left" : "top"] = "".concat(posSecond, "px");
+        guideInfoStyle[isY ? "width" : "height"] = "".concat(size, "px");
         elGuideInfoCnt.innerHTML = "".concat(Math.round(sizeRaw), "px");
 
         _this8.em.trigger("".concat(evName, ":active"), _objectSpread({}, _this8.getEventOpts(), {
@@ -26575,14 +26581,14 @@ var evName = 'dmode';
   toggleDrag: function toggleDrag(enable) {
     var ppfx = this.ppfx,
         editor = this.editor;
-    var methodCls = enable ? 'add' : 'remove';
+    var methodCls = enable ? "add" : "remove";
     var classes = ["".concat(ppfx, "is__grabbing")];
     var Canvas = editor.Canvas;
     var body = Canvas.getBody();
     classes.forEach(function (cls) {
       return body.classList[methodCls](cls);
     });
-    Canvas[enable ? 'startAutoscroll' : 'stopAutoscroll']();
+    Canvas[enable ? "startAutoscroll" : "stopAutoscroll"]();
   }
 });
 
@@ -38978,7 +38984,7 @@ var defaultConfig = {
   editors: editors,
   plugins: plugins,
   // Will be replaced on build
-  version: '0.16.13',
+  version: '0.16.19',
 
   /**
    * Initialize the editor with passed options
